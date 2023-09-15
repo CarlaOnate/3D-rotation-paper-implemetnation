@@ -33,6 +33,6 @@ def calculate_projected_axes(binary_mask):
     a = 2 * (math.sqrt(abs(major_eigenvalue)))  # semi major axis of projected ellipse
     b = 2 * (math.sqrt(abs(minor_eigenvalue)))  # semi minor axis of projected ellipse
 
-    return [a, b]
+    return [a, b] if a > b else [b, a]
 
 
