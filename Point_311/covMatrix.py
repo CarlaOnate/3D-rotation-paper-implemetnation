@@ -2,6 +2,7 @@
 import math
 import numpy as np
 
+# TODO: PONER a y b arriba del aimg a ver si esta bien ijiji (la figura 8 del paper)
 def calculate_projected_axes(binary_mask):
     squared_mask = binary_mask ** 2
     x_indices, y_indices = np.indices(binary_mask.shape)
