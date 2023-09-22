@@ -17,9 +17,8 @@ def calculate_ellipse_from_mask (mask):
 
     return ellipse
 
-def draw_ellipse(image, ellipse):
-    color = (0, 255, 0)  # Green color
-    thickness = 2
+def draw_ellipse(image, ellipse, color = (0, 0, 255)):
+    thickness = 1
     center, axes_length, angle = ellipse
 
     ellipse_box = ((center[0], center[1]), (axes_length[0], axes_length[1]), angle)   # ellipse axes, center and angle to be drawn on the img given
