@@ -25,6 +25,38 @@ def draw_ellipse(image, ellipse, color = (0, 0, 255)):
     cv2.ellipse(image, ellipse_box, color, thickness)
     return image
 
+def draw_axes_of_ellipse (image, ellipse):
+    center, axes_length, angle = ellipse
+    color = (0, 255, 0)  # Green color
+    thickness = 2
+
+    degrees = np.deg2rad(angle)
+    minor_axis_length, major_axis_length = axes_length
+
+    # Calculate minor axis start and end coordinates
+    minor_axis_endpoint1 = (
+        int(center[0] + minor_axis_length / 2 * np.cos(degrees)),
+        int(center[1] + minor_axis_length / 2 * np.sin(degrees))
+    )
+    minor_axis_endpoint2 = (
+        int(center[0] - minor_axis_length / 2 * np.cos(degrees)),
+        int(center[1] - minor_axis_length / 2 * np.sin(degrees))
+    )
+    # Calculate major axis start and end coordinates
+    major_axis_endpoint1 = (
+        int(center[0] + major_axis_length / 2 * np.cos(degrees + np.pi / 2)),
+        int(center[1] + major_axis_length / 2 * np.sin(degrees + np.pi / 2))
+    )
+    major_axis_endpoint2 = (
+        int(center[0] - major_axis_length / 2 * np.cos(degrees + np.pi / 2)),
+        int(center[1] - major_axis_length / 2 * np.sin(degrees + np.pi / 2))
+    )
+
+    cv2.line(image, major_axis_endpoint1, major_axis_endpoint2, color, thickness)
+    cv2.line(image, minor_axis_endpoint1, minor_axis_endpoint2, color, thickness)
+    return image
+
+
 def draw_semi_axes_of_ellipse (image, ellipse):
     center, axes_length, angle = ellipse
     color = (0, 255, 0)  # Green color
