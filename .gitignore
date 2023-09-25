@@ -9,3 +9,7 @@
 
 # Ignore a directory named 'data' and its contents
 data/
+
+__pycache__/
+
+*.png
