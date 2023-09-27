@@ -104,7 +104,8 @@ def table_for_views_w_spheroid(images, descriptions, size=(25, 25)):
         row = i // num_cols
         col = i % num_cols
 
-        ax = axes[row, col]
+        # ax = axes[row, col]
+        ax = axes[row, col] if num_rows > 1 else axes[col]
 
         ax.imshow(img)
         ax.axis('off')  # Hide axis
