@@ -22,9 +22,8 @@ def prev_post_values_b(current_b_index, b_list, steps, direction = 0):
     elif direction > 0:
         b_axes = enlarged_b_list[enlarged_index : (enlarged_index + total_steps)]
     else:
-        b_axes = enlarged_b_list[enlarged_index - 1 : enlarged_index + 3]
+        b_axes = enlarged_b_list[enlarged_index - 2 : enlarged_index + 2]
     return b_axes
-
 
 def estimate_b_axe_trend(b_axes):
     mean_seq = mean(b_axes)
@@ -49,7 +48,7 @@ def angle_estimation(index_view):
     curr_theta_neg = np.degrees(-np.arccos(curr_cos_theta))
     current_view_angles = (curr_theta_pos, curr_theta_neg)
 
-    rotation_per_view = 360 / len(axe_b_all_views) + 3
+    rotation_per_view = 360 / len(axe_b_all_views)
     correct_theta = lambda ascending_sequence: current_view_angles[0] if ascending_sequence and (fruit_rot == 'downwards') or (not ascending_sequence) and (fruit_rot == 'upwards') else current_view_angles[1]
 
     # Second ambiguity
@@ -81,15 +80,28 @@ def write_angle_on_img(img_to_draw, angle_text, color = (255, 0, 0)):
     return img_to_draw
 
 
-def calculate_oblate():
-    a = mean(axe_a_all_views)
-    b = min(axe_b_all_views)
-    return [a, b]
+# def calculate_oblate():
+#     a = mean(axe_a_all_views)
+#     b = min(axe_b_all_views)
+#     return [a, b]
+
+
+# def choose_smooth_angle(calc_angle):
+#     angles = [0.0, 90.0, -90.0]
+#     closest = min(angles, key=lambda x: abs(calc_angle - x))
+#     return closest
 
 def choose_smooth_angle(calc_angle):
-    angles = [0.0, 90.0, -90.0]
-    closest = min(angles, key=lambda x: abs(calc_angle - x))
-    return closest
+    diff_0 = abs(calc_angle - 0)
+    diff_90 = abs(calc_angle - 90)
+    diff_minus_90 = abs(calc_angle + 90)
+
+    if diff_0 < diff_90 and diff_0 < diff_minus_90 and diff_0 < 40:  # Lower than 40 degrees of difference
+        return 0
+    elif diff_90 < diff_0 and diff_90 < diff_minus_90:
+        return 90
+    else:
+        return -90
 
 
 def get_trend_for_view(index_view, direction = 0, step = 0):
@@ -109,10 +121,11 @@ for curr_fruit, fruit_path in enumerate(fruit_folders): # Cycle types of fruit f
     fruit_name = fruit_names[curr_fruit]
 
     for view_folder in os.listdir(fruit_path):  # Cycle folders of mandarins, tomatoes
-        image_files = []
         folder_path = os.path.join(fruit_path, view_folder)
-        if os.path.isdir(folder_path): image_files = sorted([file for file in os.listdir(folder_path)])
 
+        if not os.path.isdir(folder_path): continue
+
+        image_files = sorted([file for file in os.listdir(folder_path)])
         axe_a_all_views = []
         axe_b_all_views = []
         oblate_angles = [-1 for element in range(len(image_files))]
