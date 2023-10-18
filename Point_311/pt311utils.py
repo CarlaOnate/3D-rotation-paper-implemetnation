@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import math
 
 def create_mask_from_img (image):
     gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -16,6 +17,40 @@ def calculate_ellipse_from_mask (mask):
             ellipse = cv2.fitEllipse(contour)
 
     return ellipse
+
+# def calculate_ellipse_from_mask(binary_mask):
+#     mask = binary_mask.astype(np.int32)
+#     y_indices, x_indices = np.indices(mask.shape)
+#     positive_pixels = mask == 255
+#     result_x = x_indices[positive_pixels]
+#     result_y = y_indices[positive_pixels]
+#     n = len(result_x)
+#
+#     sx = np.sum(result_x)
+#     cx = sx / len(result_x)
+#     sxx = np.sum(np.square(result_x))
+#
+#     sy = np.sum(result_y)
+#     cy = sy / len(result_y)
+#     syy = np.sum(np.square(result_y))
+#
+#     mult_list = [x * y for x, y in zip(result_x, result_y)]
+#     sxy = np.sum(mult_list)
+#
+#     sigma_x2 = (sxx / n) - cx ** 2
+#     sigma_y2 = (syy / n) - cy ** 2
+#     sigma_xy = (sxy / n) - (cx * cy)
+#
+#     cov_matrix = [[sigma_x2, sigma_xy], [sigma_xy, sigma_y2]]
+#     eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
+#     direction_a = eigenvectors[0] / np.linalg.norm(eigenvectors[0])
+#     direction_b = eigenvectors[1] / np.linalg.norm(eigenvectors[1])
+#
+#     a = int(2 * (math.sqrt(abs(eigenvalues[0]))))  # semi major axis of projected ellipse
+#     b = int(2 * (math.sqrt(abs(eigenvalues[1]))))  # semi minor axis of projected ellipse
+#
+#     return [a, b], [int(cx), int(cy)], [direction_a, direction_b] ,[*eigenvectors],
+
 
 def draw_ellipse(image, ellipse, color = (0, 0, 255)):
     thickness = 1
@@ -49,7 +84,7 @@ def draw_axes_of_ellipse (image, ellipse):
     )
     major_axis_endpoint2 = (
         int(center[0] - major_axis_length / 2 * np.cos(degrees + np.pi / 2)),
-        int(center[1] - major_axis_length / 2 * np.sin(degrees + np.pi / 2))
+        int(center[1] - major_axis_length / 2 * np.sin(degrees + np.pi / 2  ))
     )
 
     cv2.line(image, major_axis_endpoint1, major_axis_endpoint2, color, thickness)
