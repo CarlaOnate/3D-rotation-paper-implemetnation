@@ -8,8 +8,9 @@
 .ipynb_checkpoints/
 
 # Ignore a directory named 'data' and its contents
-data/
+#data/
 
 __pycache__/
 
-*.png
+initial_implementation/*.png
+results/*.png
